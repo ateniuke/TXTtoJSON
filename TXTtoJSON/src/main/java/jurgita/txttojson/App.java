@@ -5,6 +5,7 @@ package jurgita.txttojson;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,18 +21,32 @@ public class App
 {
 	private static String encoding = "UTF8";
 	private static String field_separator = ";";
-
+	
 	public static void main( String[] args ) throws JSONException, IOException{		
-		String input_file = args[0];
-		String output_file = args[1];
-		JSONArray countries = new JSONArray();
+		String input_file;
+		try
+		{
+			 input_file = args[0];
+		}catch (ArrayIndexOutOfBoundsException e){
+			System.out.println("USAGE: \n"
+					+ " java -jar TXTtoJSON-1.0.jar <source_file.txt> ");
+			return;
+		}
 		
+		//check if passed argument is a file.
+		File f=new File(input_file);
+		if (f.isDirectory() || !f.exists()){
+			System.out.println("There is no such file! Please check and pass valid *.txt file");
+			return;
+		}
+		
+		String output_file = input_file.replace(".txt", ".json"); 
+		JSONArray countries = new JSONArray();
 		readFromFile(countries, input_file);
 		JSONObject obj = new JSONObject();
 		obj.put("countries", countries);
-		
 		writeToFile(obj, output_file);
-    	System.out.print(obj);	 
+		System.out.println("JSON file "+output_file+" was created!");
 }
 	
 	private static void writeToFile(JSONObject obj, String output_file) throws IOException, JSONException{
