@@ -49,7 +49,6 @@ public class App
 		BufferedReader br = null;
 		try {
 			String sCurrentLine;
-			//br = new BufferedReader(new FileReader(input_file));
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(input_file), encoding));
 			while ((sCurrentLine = br.readLine()) != null) {
 				String item[] = sCurrentLine.split(field_separator);
