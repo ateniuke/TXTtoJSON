@@ -1,7 +1,7 @@
 package jurgita.txttojson;
 
 /**
- * TXTtoJSON - app converts given txt file to JSON format. 
+ * TXTtoJSON - app converts given txt file(file format: <contry name>;<ISO code>) to JSON format. 
  */
 
 import java.io.BufferedReader;
@@ -35,19 +35,25 @@ public class App
 		
 		//check if passed argument is a file.
 		File f=new File(input_file);
-		if (f.isDirectory() || !f.exists()){
-			System.out.println("There is no such file! Please check and pass valid *.txt file");
+		if ( f.isDirectory() || !f.exists() || f.length()==0 ){
+			System.out.println("There is no such file or it is empty! Please check and pass valid *.txt file");
 			return;
 		}
-		
+		//
 		String output_file = input_file.replace(".txt", ".json"); 
+		
 		JSONArray countries = new JSONArray();
 		readFromFile(countries, input_file);
+		
 		JSONObject obj = new JSONObject();
 		obj.put("countries", countries);
+		
 		writeToFile(obj, output_file);
 		System.out.println("JSON file "+output_file+" was created!");
 }
+	/*
+	 * JSON object is written to result file.
+	 */
 	
 	private static void writeToFile(JSONObject obj, String output_file) throws IOException, JSONException{
 		try {
@@ -60,6 +66,10 @@ public class App
     	}
 	}//writeToFile
 	
+	/*
+	 * Information is read from a file.
+	 */
+	
 	private static void readFromFile(JSONArray list, String input_file) throws IOException{
 		BufferedReader br = null;
 		try {
@@ -70,13 +80,12 @@ public class App
 		        Country con = new Country(item[1], item[0]);
 		        list.put(new JSONObject (con));     
 			}
-			br.close();
- 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (br != null)br.close();
+				if (br != null)
+					br.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
