@@ -39,7 +39,7 @@ public class App
 			System.out.println("There is no such file or it is empty! Please check and pass valid *.txt file");
 			return;
 		}
-		//
+
 		String output_file = input_file.replace(".txt", ".json"); 
 		
 		JSONArray countries = new JSONArray();
